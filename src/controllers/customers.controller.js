@@ -14,7 +14,8 @@ export async function getCustomersById(req, res) {
   try {
     const customer = await db.query(`SELECT * FROM customers WHERE id=$1`, [id])
     if (customer.rows <= 0) return res.sendStatus(404)
-    return res.send(customer.rows)
+    console.log(customer.rows[0])
+    return res.send(customer.rows[0])
   } catch (error) {
     return res.sendStatus(500)
   }
@@ -38,7 +39,6 @@ export async function putCustomersById(req, res){
   const { id } = req.params 
   try { 
     const cpfOtherCustumer = await db.query(`SELECT cpf FROM customers WHERE id <> $1 AND cpf = $2`, [id, cpf])
-    console.log('cpf', cpfOtherCustumer.rows)
     if (cpfOtherCustumer.rows.length > 0) return res.sendStatus(409)
     await db.query(`UPDATE customers SET name = $1, phone = $2, cpf = $3, birthday = $4 
     WHERE id = $5`, [name, phone, cpf, birthday, id])
