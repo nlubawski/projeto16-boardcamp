@@ -8,5 +8,4 @@ router.use(gamesRouter)
 router.use(customersRouter)
 router.use(rentalsRouter)
 
-
 export default router
