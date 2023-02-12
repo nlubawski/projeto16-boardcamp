@@ -53,6 +53,19 @@ export async function finishRental(req, res) {
   }
 }
 
+export async function deleteRental(req, res){
+  const {id} = req.params
+  try {
+    const result = await db.query(`SELECT * FROM rentals WHERE id = $1`, [id])
+    if(result.rows.length === 0) return res.sendStatus(404)
+    const rental = result.rows[0]
+    if(!rental.returnDate) res.sendStatus(400)
+    await db.query(`DELETE FROM rentals WHERE id=$1`, [id])
+  } catch (error) {
+    return res.sendStatus(500)
+  }
+}
+
 function rentalToObject(row) {
   const [
     id, customerId, gameId,
