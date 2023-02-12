@@ -1,7 +1,8 @@
 import {Router} from 'express'
-import { getRentals } from '../controllers/rentals.controllers.js'
+import { getRentals, postRentals } from '../controllers/rentals.controllers.js'
 
 const rentalsRouter = Router()
 rentalsRouter.get('/rentals', getRentals)
+rentalsRouter.post('/rentals', postRentals)
 
 export default rentalsRouter
