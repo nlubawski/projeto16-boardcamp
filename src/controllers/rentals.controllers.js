@@ -43,13 +43,14 @@ export async function finishRental(req, res) {
     if (rentalId.rows.length === 0) return res.sendStatus(404)
     const rental = rentalId.rows[0];
     if (rental.returnDate) return res.sendStatus(400);
-    const diference = new Date().getTime() - new Date(rental.rentDate).getTime();
-    const diferenceInDays = Math.floor(diference / (24 * 3600 * 1000));
+    const diference = new Date(date) - new Date(rental.rentDate)
+    const diferenceInDays = Math.trunc(diference / (1000 * 60 * 60 * 24));
     let delayFee = 0;
     if (diferenceInDays > rental.daysRented) {
       const addicionalDays = diferenceInDays - rental.daysRented;
       delayFee = addicionalDays * rental.originalPrice;
     };
+
     await db.query(`UPDATE rentals SET "returnDate" = NOW(), "delayFee" = $1 WHERE id = $2`, [delayFee, id]);
     return res.sendStatus(200)
   } catch (error) {
