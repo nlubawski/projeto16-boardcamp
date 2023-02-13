@@ -19,6 +19,7 @@ export async function postRentals(req, res) {
     if (customer.rows.length === 0) return res.sendStatus(400)
     const game = await db.query(`SELECT * FROM games WHERE id=$1`, [gameId])
     if (game.rows.length === 0) return res.sendStatus(400)
+    if (daysRented <= 0) return res.sendStatus(400)
     const result = await db.query(`SELECT id FROM rentals WHERE "gameId" = $1 AND 
     "returnDate" IS null`, [gameId])
 
